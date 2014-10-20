@@ -1,6 +1,6 @@
 #Fire Net
 
-This problem came frome ZOJ: [http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=1002](Problem 1002)
+This problem came frome ZOJ: [Problem 1002](http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=1002)
 
 ##Problem:
 
@@ -24,40 +24,44 @@ For each test case, output one line containing the maximum number of blockhouses
 
 ###Sample input:
 
-4<br/>
-.X..<br/>
-....<br/>
-XX..<br/>
-....<br/>
-2<br/>
-XX<br/>
-.X<br/>
-3<br/>
-.X.<br/>
-X.X<br/>
-.X.<br/>
-3<br/>
-...<br/>
-.XX<br/>
-.XX<br/>
-4<br/>
-....<br/>
-....<br/>
-....<br/>
-....<br/>
+```
+4
+.X..
+....
+XX..
+....
+2
+XX
+.X
+3
+.X.
+X.X
+.X.
+3
+...
+.XX
+.XX
+4
+....
+....
+....
+....
 0
+```
 
 ###Sample output:
 
-5<br/>
-1<br/>
-5<br/>
-2<br/>
+```
+5
+1
+5
+2
 4
+```
 
 ##Solution 1 (Non-recursive) - Programming Language: C
 
-```
+```c
 #include <stdio.h>
 #include <stdlib.h>
 
