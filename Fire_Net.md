@@ -1,5 +1,7 @@
 #Fire Net
 
+This problem came frome ZOJ: [http://acm.zju.edu.cn/onlinejudge/showProblem.do?problemCode=1002](Problem 1002)
+
 ##Problem:
 
 Suppose that we have a square city with straight streets. A map of a city is a square board with n rows and n columns, each representing a street or a piece of wall.
@@ -12,6 +14,7 @@ The goal is to place as many blockhouses in a city as possible so that no two ca
 
 The following image shows five pictures of the same board. The first picture is the empty board, the second and third pictures show legal configurations, and the fourth and fifth pictures show illegal configurations. For this board, the maximum number of blockhouses in a legal configuration is 5; the second picture shows one way to do it, but there are several other ways.
 
+![Fire Net][1]
 
 Your task is to write a program that, given a description of a map, calculates the maximum number of blockhouses that can be placed in the city in a legal configuration.
 
@@ -21,38 +24,38 @@ For each test case, output one line containing the maximum number of blockhouses
 
 ###Sample input:
 
-4
-.X..
-....
-XX..
-....
-2
-XX
-.X
-3
-.X.
-X.X
-.X.
-3
-...
-.XX
-.XX
-4
-....
-....
-....
-....
+4<br/>
+.X..<br/>
+....<br/>
+XX..<br/>
+....<br/>
+2<br/>
+XX<br/>
+.X<br/>
+3<br/>
+.X.<br/>
+X.X<br/>
+.X.<br/>
+3<br/>
+...<br/>
+.XX<br/>
+.XX<br/>
+4<br/>
+....<br/>
+....<br/>
+....<br/>
+....<br/>
 0
 
 ###Sample output:
 
-5
-1
-5
-2
+5<br/>
+1<br/>
+5<br/>
+2<br/>
 4
 
-##Solution 1 (Non-recursive):
+##Solution 1 (Non-recursive) - Programming Language: C
 
 ```
 #include <stdio.h>
@@ -232,3 +235,5 @@ Point remove_blockhouse(int **grid, int size, Point* stack, int* stackSize) {
     }
 }
 ```
+
+[1]: /images/firenet.gif
