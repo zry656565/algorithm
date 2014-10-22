@@ -66,7 +66,7 @@ X.X
 #include <stdlib.h>
 
 #define isNULL(point) ((point).x == -1)
-#define PointNull ((Point){-1, -1})
+#define NullP ((Point){-1, -1})
 
 enum type { Blank, Wall, Blockhouse };
 typedef struct _Point
@@ -86,18 +86,19 @@ int main(void) {
     int maxSize = 0;
     Point blockhouseStack[20];
     int blockhouseNum = 0;
+    int first = 1;
     while (scanf("%d\n", &size) != EOF) {
         if (size <= 0) {
             break;
         }
         int i, j;
-        // initialize grid
+        /* initialize grid */
         grid = (int**) malloc(size * sizeof(int*));
         for (j = 0; j < size; j++) {
             grid[j] = (int*) malloc(size * sizeof(int));
         }
 
-        //store input to [grid]
+        /* store input to [grid] */
         char c;
         for (j = 0; j < size; j++) {
             for (i = 0; i < size; i++) {
@@ -111,11 +112,11 @@ int main(void) {
                     break;
                 }
             }
-            //pop \n
+            /* pop \n */
             getchar();
         }
 
-        //put blockhouses
+        /* put blockhouses */
         Point start = {0, 0};
         while (1) {
 #ifdef debug
@@ -139,9 +140,16 @@ int main(void) {
             }
         }
 
-        printf("%d\n", maxSize);
+        /* do this to meet the format that ZOJ needs */
+        if (!first) {
+            printf("\n");
+        } else {
+            first = 0;
+        }
 
-        //free grid
+        printf("%d", maxSize);
+
+        /* free grid */
         for (j = 0; j < size; j++) {
             free(grid[j]);
         }
@@ -157,7 +165,7 @@ int placeable(int **grid, int size, Point p) {
     if (grid[y][x] != Blank) {
         return 0;
     }
-    //up
+    /*up*/
     while (--y >= 0) {
         if (grid[y][x] == Blockhouse) {
             return 0;
@@ -165,7 +173,7 @@ int placeable(int **grid, int size, Point p) {
             break;
         }
     }
-    //down
+    /*down*/
     y = p.y;
     while (++y < size) {
         if (grid[y][x] == Blockhouse) {
@@ -174,7 +182,7 @@ int placeable(int **grid, int size, Point p) {
             break;
         }
     }
-    //left
+    /*left*/
     y = p.y;
     while (--x >= 0) {
         if (grid[y][x] == Blockhouse) {
@@ -183,7 +191,7 @@ int placeable(int **grid, int size, Point p) {
             break;
         }
     }
-    //right
+    /*right*/
     x = p.x;
     while (++x < size) {
         if (grid[y][x] == Blockhouse) {
@@ -192,12 +200,12 @@ int placeable(int **grid, int size, Point p) {
             break;
         }
     }
-    //pass all test
+    /*pass all test*/
     return 1;
 }
 Point put_blockhouse(int **grid, int size, Point start, Point* stack, int* stackSize) {
     if (isNULL(start)) {
-        return PointNull;
+        return NullP;
     }
     int i = start.x, j = start.y;
     for (; j < size; j++) {
@@ -210,11 +218,11 @@ Point put_blockhouse(int **grid, int size, Point start, Point* stack, int* stack
         }
         i = 0;
     }
-    return PointNull;
+    return NullP;
 }
 Point next_point(Point p, int size) {
     if (isNULL(p)) {
-        return PointNull;
+        return NullP;
     }
     if (p.x + 1 < size) {
         p.x += 1;
@@ -224,7 +232,7 @@ Point next_point(Point p, int size) {
             p.x = 0;
         }
         else {
-            return PointNull;
+            return NullP;
         }
     }
     return p;
@@ -235,7 +243,7 @@ Point remove_blockhouse(int **grid, int size, Point* stack, int* stackSize) {
         grid[p.y][p.x] = Blank;
         return p;
     } else {
-        return PointNull;
+        return NullP;
     }
 }
 ```
