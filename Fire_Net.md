@@ -251,4 +251,196 @@ Point remove_blockhouse(int **grid, int size, Point* stack, int* stackSize) {
 }
 ```
 
+##Solution 2 (Recursive) - Programming Language: C
+
+- Run Time: ~0s
+- Run Memory: 168kb
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define isNULL(point) ((point).x == -1)
+#define NullP ((Point){-1, -1})
+
+enum type { Blank, Wall, Blockhouse };
+typedef struct _Point
+{
+    int x;
+    int y;
+} Point;
+int placeable(int **grid, int size, Point p);
+Point put_blockhouse(int **grid, int size, Point start, Point* stack, int* stackSize);
+Point next_point(Point p, int size);
+Point remove_blockhouse(int **grid, int size, Point* stack, int* stackSize);
+
+
+int main(void) {
+    int **grid;
+    int size;
+    int maxSize = 0;
+    Point blockhouseStack[20];
+    int blockhouseNum = 0;
+    int first = 1;
+    while (scanf("%d\n", &size) != EOF) {
+        if (size <= 0) {
+            break;
+        }
+        int i, j;
+        /* initialize grid */
+        grid = (int**) malloc(size * sizeof(int*));
+        for (j = 0; j < size; j++) {
+            grid[j] = (int*) malloc(size * sizeof(int));
+        }
+
+        /* store input to [grid] */
+        char c;
+        for (j = 0; j < size; j++) {
+            for (i = 0; i < size; i++) {
+                scanf("%c", &c);
+                switch (c) {
+                case 'X':
+                    grid[j][i] = Wall;
+                    break;
+                case '.':
+                    grid[j][i] = Blank;
+                    break;
+                }
+            }
+            /* pop \n */
+            getchar();
+        }
+
+        /* put blockhouses */
+        Point start = {0, 0};
+        while (1) {
+#ifdef debug
+            printf("STACK:");
+            for (int k = 0; k < blockhouseNum; k++) {
+                printf("(%d, %d) ", blockhouseStack[k].x, blockhouseStack[k].y);
+            }
+            printf("\n");
+#endif
+            if (!isNULL(start = put_blockhouse(grid, size, start, blockhouseStack, &blockhouseNum))) {
+                (maxSize < blockhouseNum) && (maxSize = blockhouseNum);
+            } else {
+                if (blockhouseNum == 0) {
+                    break;
+                }
+                start = remove_blockhouse(grid, size, blockhouseStack, &blockhouseNum);
+                start = next_point(start, size);
+                if (isNULL(start) && blockhouseNum == 0) {
+                    break;
+                }
+            }
+        }
+
+        /* do this to meet the format that ZOJ needs */
+        if (!first) {
+            printf("\n");
+        } else {
+            first = 0;
+        }
+
+        printf("%d", maxSize);
+
+        /* free grid */
+        for (j = 0; j < size; j++) {
+            free(grid[j]);
+        }
+        free(grid);
+        blockhouseNum = 0;
+        maxSize = 0;
+    }
+    return 0;
+}
+
+int placeable(int **grid, int size, Point p) {
+    int x = p.x, y = p.y;
+    if (grid[y][x] != Blank) {
+        return 0;
+    }
+    /*up*/
+    while (--y >= 0) {
+        if (grid[y][x] == Blockhouse) {
+            return 0;
+        } else if (grid[y][x] == Wall) {
+            break;
+        }
+    }
+    /*down*/
+    y = p.y;
+    while (++y < size) {
+        if (grid[y][x] == Blockhouse) {
+            return 0;
+        } else if (grid[y][x] == Wall) {
+            break;
+        }
+    }
+    /*left*/
+    y = p.y;
+    while (--x >= 0) {
+        if (grid[y][x] == Blockhouse) {
+            return 0;
+        } else if (grid[y][x] == Wall) {
+            break;
+        }
+    }
+    /*right*/
+    x = p.x;
+    while (++x < size) {
+        if (grid[y][x] == Blockhouse) {
+            return 0;
+        } else if (grid[y][x] == Wall) {
+            break;
+        }
+    }
+    /*pass all test*/
+    return 1;
+}
+Point put_blockhouse(int **grid, int size, Point start, Point* stack, int* stackSize) {
+    if (isNULL(start)) {
+        return NullP;
+    }
+    int i = start.x, j = start.y;
+    for (; j < size; j++) {
+        for (; i < size; i++) {
+            if (placeable(grid, size, (Point){i, j})) {
+                grid[j][i] = Blockhouse;
+                stack[(*stackSize)++] = (Point){i, j};
+                return (Point){0, 0};
+            }
+        }
+        i = 0;
+    }
+    return NullP;
+}
+Point next_point(Point p, int size) {
+    if (isNULL(p)) {
+        return NullP;
+    }
+    if (p.x + 1 < size) {
+        p.x += 1;
+    } else {
+        if (p.y + 1 < size) {
+            p.y += 1;
+            p.x = 0;
+        }
+        else {
+            return NullP;
+        }
+    }
+    return p;
+}
+Point remove_blockhouse(int **grid, int size, Point* stack, int* stackSize) {
+    if (stackSize > 0) {
+        Point p = stack[--(*stackSize)];
+        grid[p.y][p.x] = Blank;
+        return p;
+    } else {
+        return NullP;
+    }
+}
+```
+
 [1]: /images/firenet.gif
