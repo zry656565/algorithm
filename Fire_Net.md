@@ -61,6 +61,9 @@ X.X
 
 ##Solution 1 (Non-recursive) - Programming Language: C
 
+- Run Time: ~0s
+- Run Memory: 168kb
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
